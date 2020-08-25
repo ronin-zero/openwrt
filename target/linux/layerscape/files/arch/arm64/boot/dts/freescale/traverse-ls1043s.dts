@@ -109,8 +109,8 @@
 			gpios = <&gpio4 1 GPIO_ACTIVE_LOW>;
 		};
 	};
-	
-	gpio-keys-polled {
+
+	keys {
 		compatible = "gpio-keys-polled";
 		#address-cells = <1>;
 		#size-cells = <0>;

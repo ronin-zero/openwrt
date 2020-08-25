@@ -5,9 +5,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/ucert.git
-PKG_SOURCE_DATE:=2018-08-08
-PKG_SOURCE_VERSION:=1056e730f56adbc6bc77872e2bbd2bbe01512ec9
-PKG_MIRROR_HASH:=59fc4ab5b5cb10c6e9e0899e3ed5de2f57926e980d31c13ddd1662f36cf40cef
+PKG_SOURCE_DATE:=2020-05-24
+PKG_SOURCE_VERSION:=00b921d80ac0dc47339305d803f865ff43c56d63
+PKG_MIRROR_HASH:=839fda1811a58a495ac7bbc41db75222dd5a15e4d72110ca6acc4cdad56908fe
 
 CMAKE_INSTALL:=1
 PKG_CHECK_FORMAT_SECURITY:=1
@@ -16,8 +16,6 @@ PKG_LICENSE:=GPL-3.0+
 PKG_LICENSE_FILES:=COPYING
 
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
-
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
@@ -47,6 +45,7 @@ define Package/ucert
   CATEGORY:=Base system
   DEPENDS:=+usign +libubox
   TITLE:=OpenWrt certificate verification utility
+  PROVIDES:=ucert
   CONFLICTS:=ucert-full
   VARIANT:=tiny
 endef

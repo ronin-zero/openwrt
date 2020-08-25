@@ -183,14 +183,14 @@ static int ag71xx_mdio_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	am->mii_regmap = syscon_regmap_lookup_by_phandle(np, "regmap");
-	if (!am->mii_regmap)
-		return -ENOENT;
+	if (IS_ERR(am->mii_regmap))
+		return PTR_ERR(am->mii_regmap);
 
 	mii_bus = devm_mdiobus_alloc(amdev);
 	if (!mii_bus)
 		return -ENOMEM;
 
-	am->mdio_reset = of_reset_control_get_exclusive(np, "mdio");
+	am->mdio_reset = devm_reset_control_get_exclusive(amdev, "mdio");
 	builtin_switch = of_property_read_bool(np, "builtin-switch");
 
 	mii_bus->name = "ag71xx_mdio";

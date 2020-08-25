@@ -10,17 +10,21 @@
 set -e
 
 version=1.0
-FIND="$(which find)"
-FIND="${FIND:-$(which gfind)}"
-TAR="${TAR:-$(which tar)}"
-GZIP="$(which gzip)"
+FIND="$(command -v find)"
+FIND="${FIND:-$(command -v gfind)}"
+TAR="${TAR:-$(command -v tar)}"
+GZIP="$(command -v gzip)"
+
+# try to use fixed source epoch
+if [ -n "$SOURCE_DATE_EPOCH" ]; then
+	TIMESTAMP=$(date --date="@$SOURCE_DATE_EPOCH")
 
 # look up date of last commit
-if [ -d "$TOPDIR/.git" ]; then
-	GIT="$(which git)"
+elif [ -d "$TOPDIR/.git" ]; then
+	GIT="$(command -v git)"
 	TIMESTAMP=$(cd $TOPDIR; $GIT log -1 -s --format=%ci)
 elif [ -d "$TOPDIR/.svn" ]; then
-	SVN="$(which svn)"
+	SVN="$(command -v svn)"
 	TIMESTAMP=$($SVN info "$TOPDIR" | sed -n "s/^Last Changed Date: \(.*\)/\1/p")
 else
 	TIMESTAMP=$(date)
@@ -60,8 +64,10 @@ pkg_appears_sane() {
 		done
 
 		rm $CONTROL/conffiles
-		mv $CONTROL/conffiles.resolved $CONTROL/conffiles
-		chmod 0644 $CONTROL/conffiles
+		if [ -f $CONTROL/conffiles.resolved ]; then
+			mv $CONTROL/conffiles.resolved $CONTROL/conffiles
+			chmod 0644 $CONTROL/conffiles
+		fi
 	fi
 
 	cd $owd
